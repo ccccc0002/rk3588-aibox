@@ -1,0 +1,21 @@
+﻿# Node
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Runtime data
+data/
+logs/
+*.log
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env
+.env
+.env.*
