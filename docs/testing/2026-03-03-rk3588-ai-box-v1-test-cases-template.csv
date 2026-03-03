@@ -1,0 +1,11 @@
+CaseID,Module,Priority,Title,Precondition,Steps,ExpectedResult,Owner,Sprint,Labels
+TC-INGEST-001,Ingest,P0,RTSP单路主码流接入成功,摄像头在线,新增RTSP设备并启动预览,设备在线且预览正常无转码告警,QA,SP1,ingest;preview
+TC-INGEST-002,Ingest,P0,20路同时接入稳定,20路摄像头可用,批量导入并运行30分钟,在线率>=99.5%且无批量掉线,QA,SP1,ingest;stability
+TC-PREVIEW-002,Preview,P0,预览链路无编码器调用,开启调试日志,连续预览10分钟,日志无encode路径调用,QA,SP1,preview;no-transcode
+TC-AI-003,Analysis,P0,自动抽帧高压降帧策略,20路高目标密度,压测20分钟,普通路降到2~5FPS且系统稳定,QA,SP2,analysis;scheduler
+TC-EVENT-002,Event,P0,告警短视频默认20秒,默认配置,触发告警并下载视频,视频时长约20秒,QA,SP2,event;media
+TC-STORAGE-001,Storage,P0,85%高水位触发清理,媒体占用>=85%,触发新媒体写入,自动启动oldest-first清理,QA,SP2,storage;cleanup
+TC-GAT-002,GAT1400,P0,GAT1400北向上报ACK流程,北向平台可回ACK,触发告警上报,上报成功且有ACK记录,QA,SP3,protocol;gat1400
+TC-GB-001,GB28181,P0,GB28181注册与保活,GB平台可联通,设备注册并运行保活,注册成功且保活正常,QA,SP3,protocol;gb28181
+TC-AUTH-002,Auth,P0,跨项目越权拦截,账号仅授权项目A,访问项目B事件列表,返回403并写审计日志,QA,SP3,auth;isolation
+TC-PERF-002,Perf,P0,告警时延达标,可触发规则场景,采样100次告警,单路P95时延<=2s,QA,SP4,performance;latency
