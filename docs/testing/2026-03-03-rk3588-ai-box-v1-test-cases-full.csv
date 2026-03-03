@@ -1,0 +1,70 @@
+CaseID,Module,Priority,Title,Precondition,Steps,ExpectedResult,Owner,Sprint,Labels
+TC-INGEST-001,Ingest,P0,RTSP single stream connect,Camera online/Add permission,Add RTSP device and start preview,Device online and preview works,QA,SP1,ingest;rtsp
+TC-INGEST-002,Ingest,P0,RTSP batch 20 channels,20 cameras reachable,Import 20 cameras and enable all,Online rate >=99.5 percent,QA,SP1,ingest;batch
+TC-INGEST-003,Ingest,P1,ONVIF discovery,ONVIF network reachable,Run discovery and add selected cameras,Cameras discovered and added correctly,QA,SP1,ingest;onvif
+TC-INGEST-004,Ingest,P1,Reconnect after disconnect,One camera connected,Disconnect network 60s then restore,Auto reconnect and back to online,QA,SP1,ingest;reconnect
+TC-INGEST-005,Ingest,P1,Invalid stream handling,Use invalid RTSP URL,Add invalid URL and start stream,Error state is clear and no crash,QA,SP1,ingest;error
+TC-INGEST-006,Ingest,P2,Duplicate camera code check,Camera code uniqueness policy enabled,Create second camera with same code,System rejects duplicate code,QA,SP1,ingest;validation
+TC-PREVIEW-001,Preview,P0,1 split preview,At least 1 online camera,Open realtime center and choose 1 split,Video visible and smooth,QA,SP1,preview;layout
+TC-PREVIEW-002,Preview,P0,4 split preview,At least 4 online cameras,Switch to 4 split,All 4 panes load correctly,QA,SP1,preview;layout
+TC-PREVIEW-003,Preview,P0,9 split preview,At least 9 online cameras,Switch to 9 split,All 9 panes load correctly,QA,SP1,preview;layout
+TC-PREVIEW-004,Preview,P0,16 split preview,At least 16 online cameras,Switch to 16 split,All 16 panes load correctly,QA,SP1,preview;layout
+TC-PREVIEW-005,Preview,P0,No-transcode contract,Debug logs enabled,Preview 10 minutes and inspect pipeline logs,No encoder call in preview path,QA,SP1,preview;no-transcode
+TC-PREVIEW-006,Preview,P1,H265 supported client playback,HEVC capable browser available,Open H265 stream preview,Playback is normal,QA,SP1,preview;h265
+TC-PREVIEW-007,Preview,P1,H265 unsupported client warning,Non HEVC browser available,Open H265 stream preview,User sees compatibility warning,QA,SP1,preview;h265;compatibility
+TC-PREVIEW-008,Preview,P1,Project switch refresh token,User has project A and B,Switch project while preview active,Preview token reissued and new project data shown,QA,SP3,preview;auth
+TC-AI-001,Analysis,P0,Person detection output,Camera scene with person,Enable rule and observe detections,Bounding box and class are correct,QA,SP2,analysis;detection
+TC-AI-002,Analysis,P0,Vehicle detection output,Camera scene with vehicle,Enable rule and observe detections,Vehicle class and score are valid,QA,SP2,analysis;detection
+TC-AI-003,Analysis,P0,Normal load FPS target,10 channels active with normal load,Run 15 minutes and read scheduler metrics,Most channels stay near 8 FPS,QA,SP2,analysis;scheduler
+TC-AI-004,Analysis,P0,High load FPS downgrade,20 channels high target density,Run stress 20 minutes,Common channels downgrade to 2-5 FPS,QA,SP2,analysis;scheduler;stress
+TC-AI-005,Analysis,P1,Alarm boost FPS,Alarm scene prepared,Trigger alarm and inspect target channel FPS,Target channel boosted to policy max,QA,SP2,analysis;scheduler;alarm
+TC-AI-006,Analysis,P1,Thermal protection scaling,Thermal threshold simulation ready,Simulate high temperature event,System applies global FPS scale down,QA,SP2,analysis;thermal
+TC-AI-007,Analysis,P1,Queue backpressure stability,Queue metrics enabled,Inject burst frames and watch queue depth,No crash and queue stabilizes,QA,SP2,analysis;backpressure
+TC-AI-008,Analysis,P2,Tracker ID continuity,Moving target in same camera,Track target for 60 seconds,Track ID remains mostly stable,QA,SP2,analysis;tracking
+TC-EVENT-001,Event,P0,Alarm event lifecycle,Rule configured and scene ready,Trigger intrusion alarm,Event persisted with complete fields,QA,SP2,event;lifecycle
+TC-EVENT-002,Event,P0,Default clip duration 20s,Default config active,Trigger alarm and inspect clip,Clip duration is around 20s,QA,SP2,event;media
+TC-EVENT-003,Event,P1,Configurable clip duration,Admin role available,Change clip duration to 12s and trigger,New clip duration around 12s,QA,SP2,event;config
+TC-EVENT-004,Event,P1,Snapshot generation,Alarm rule active,Trigger event and check snapshot URL,Snapshot file exists and is readable,QA,SP2,event;snapshot
+TC-EVENT-005,Event,P1,Event dedup merge,Debounce rule configured,Trigger repeated same event bursts,Events merged by dedup logic,QA,SP2,event;dedup
+TC-EVENT-006,Event,P2,Invalid media path fallback,Simulate path write failure,Trigger event media recording,System logs failure and keeps event metadata,QA,SP2,event;resilience
+TC-STORAGE-001,Storage,P0,High watermark trigger cleanup,Media usage >=85 percent,Create new media file,Oldest-first cleanup starts automatically,QA,SP2,storage;cleanup
+TC-STORAGE-002,Storage,P0,Low watermark stop cleanup,Cleanup running,Observe disk usage over time,Cleanup stops at <=70 percent,QA,SP2,storage;cleanup
+TC-STORAGE-003,Storage,P1,Metadata preserved after cleanup,Existing historical events,Run cleanup and query event list,Event metadata remains queryable,QA,SP2,storage;metadata
+TC-STORAGE-004,Storage,P1,Cleanup audit record,Audit enabled,Trigger cleanup cycle,Audit contains start end and deleted count,QA,SP3,storage;audit
+TC-TASK-001,Task,P1,MP4 task create and run,Sample MP4 uploaded,Create analysis task and run,Task completes successfully,QA,SP3,task;mp4
+TC-TASK-002,Task,P1,MP4 task result mapping,Completed MP4 task available,Open result detail page,Events and snapshots are linked correctly,QA,SP3,task;mp4;result
+TC-TASK-003,Task,P1,Image stream task create,Image source prepared,Create image stream task and run,Detection stream works and events appear,QA,SP3,task;image-stream
+TC-TASK-004,Task,P2,Task retry flow,Inject transient processing failure,Retry failed task,Task can be retried and finishes,QA,SP3,task;retry
+TC-TASK-005,Task,P2,Task cancellation,Long running task active,Cancel task from UI,Task stops and status is cancelled,QA,SP3,task;cancel
+TC-HTTP-001,Protocol,P0,Webhook delivery success,Reachable webhook endpoint configured,Trigger alarm event,Endpoint receives standard JSON payload,QA,SP3,protocol;http
+TC-HTTP-002,Protocol,P0,Webhook retry policy,Webhook responds 500,Trigger alarm and observe retry logs,Exponential retry is executed correctly,QA,SP3,protocol;http;retry
+TC-HTTP-003,Protocol,P1,Webhook idempotency,Retry scenario prepared,Send same event_id repeatedly,No duplicate persistence by idempotency key,QA,SP3,protocol;http;idempotency
+TC-GAT-001,GAT1400,P0,Inbound mapping to unified model,GAT inbound sender available,Send standard inbound message,Internal unified event created correctly,QA,SP3,protocol;gat1400;inbound
+TC-GAT-002,GAT1400,P0,Outbound with ACK,GAT northbound receiver with ACK,Trigger event outbound,ACK received and state marked success,QA,SP3,protocol;gat1400;outbound
+TC-GAT-003,GAT1400,P1,Outbound retry and dead-letter,GAT northbound unreachable,Trigger many outbound failures,Event moves to dead-letter after max retries,QA,SP3,protocol;gat1400;dlq
+TC-GAT-004,GAT1400,P1,Dead-letter replay,Dead-letter entries exist,Replay one failed event manually,Replay succeeds and state updates,QA,SP3,protocol;gat1400;replay
+TC-GB-001,GB28181,P0,SIP register success,GB platform reachable,Start register flow,Register succeeds and state online,QA,SP3,protocol;gb28181;sip
+TC-GB-002,GB28181,P0,Keepalive success,Registered GB device,Run keepalive cycle,Keepalive responses are normal,QA,SP3,protocol;gb28181;keepalive
+TC-GB-003,GB28181,P1,Catalog sync mapping,GB catalog prepared,Start catalog sync,Channels mapped to internal camera records,QA,SP3,protocol;gb28181;catalog
+TC-GB-004,GB28181,P1,Cascade upstream downstream,Upper and lower platform configured,Trigger cascade flow,Messages relayed with audit trace,QA,SP3,protocol;gb28181;cascade
+TC-AUTH-001,Auth,P0,Local account login,Valid local account exists,Login with username password,Login success and token issued,QA,SP1,auth;login
+TC-AUTH-002,Auth,P0,Invalid password rejected,Valid account exists,Login with wrong password,Rejected with clear error code,QA,SP1,auth;login
+TC-AUTH-003,Auth,P0,Cross-project access denied,User only in project A,Call project B event API,403 returned and audited,QA,SP3,auth;isolation
+TC-AUTH-004,Auth,P0,Multi-project switch,User in project A and B,Switch project from header selector,Context switched and data refreshed,QA,SP3,auth;project-switch
+TC-AUTH-005,Auth,P1,Role menu visibility,Operator and auditor accounts,Login with each role,Visible menus match permission policy,QA,SP3,auth;rbac
+TC-AUTH-006,Auth,P1,API permission enforcement,Read-only role account,Call write API endpoint,Write action blocked by RBAC,QA,SP3,auth;rbac;api
+TC-AUDIT-001,Audit,P0,Critical action audit trail,Admin performs config update,Change rule and protocol settings,Audit has actor target time result,QA,SP3,audit;trace
+TC-AUDIT-002,Audit,P1,Project switch audit,User switches project context,Switch project twice,Each switch recorded with project IDs,QA,SP3,audit;project-switch
+TC-COCKPIT-001,Cockpit,P1,Map topology rendering,Camera point metadata prepared,Open cockpit map view,All points and links render correctly,QA,SP4,cockpit;map
+TC-COCKPIT-002,Cockpit,P1,Cross-camera trajectory default window,Cross-camera events available,Open trajectory query with default settings,Default 30s window applied,QA,SP4,cockpit;trajectory
+TC-COCKPIT-003,Cockpit,P2,Trend chart update,Realtime events incoming,Observe trend chart for 5 minutes,Chart updates continuously without freeze,QA,SP4,cockpit;chart
+TC-BRAND-001,Branding,P2,Update logo and title,Admin role available,Upload logo and set new title,UI branding updated after refresh,QA,SP4,branding;ui
+TC-BRAND-002,Branding,P2,Project scoped branding,Project A and B configured,Switch project and view login/header,Branding follows current project config,QA,SP4,branding;project
+TC-PERF-001,Performance,P0,20 channel 2h stability,20 streams ready,Run 2 hour endurance test,No service crash and key metrics stable,QA,SP4,performance;stability
+TC-PERF-002,Performance,P0,Alarm latency baseline,Alarm scene and timing probe ready,Trigger 100 alarm samples,P95 end-to-end latency <=2s,QA,SP4,performance;latency
+TC-PERF-003,Performance,P1,Protocol success rate,GAT and HTTP endpoints stable,Send batch events,Delivery success rate >=99 percent,QA,SP4,performance;protocol
+TC-PERF-004,Performance,P1,Resource usage baseline,Monitoring enabled,Run 20 channels for 30 minutes,CPU NPU memory temp within policy,QA,SP4,performance;resource
+TC-PERF-005,Performance,P1,Preview availability baseline,20 preview sessions active,Run 60 minutes and sample status,Preview availability >=99.5 percent,QA,SP4,performance;availability
+TC-STAB-001,Stability,P1,7x24 soak run,Pre-release env prepared,Run full stack 7x24 soak,No major outage and recoverable minor faults,QA,SP5,stability;soak
+TC-REL-001,Release,P1,Rollback drill service version,N and N-1 package ready,Upgrade then rollback services,Rollback succeeds and data remains consistent,QA,SP5,release;rollback
+TC-REL-002,Release,P1,Rollback drill config snapshot,Config versioning enabled,Apply risky config then rollback,Old config restored successfully,QA,SP5,release;config
